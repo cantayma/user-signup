@@ -13,8 +13,8 @@ header = """
 form = """
         <form>
             <label>
-                Username: 
-                <input type="text">
+                Username:
+                <input type="text" name="username">
             </label>
             <br>
             <label>
@@ -29,7 +29,7 @@ form = """
             <br>
             <label>
                 Email (optional):
-                <input type="email">
+                <input type="email" name="email">
             </label>
             <br>
             <input type="submit">
@@ -45,6 +45,16 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         content = header + form + footer
         self.response.write(content)
+
+    def post(self):
+        #error checkig here
+        #if good then
+        #redirect to /welcome
+
+class Welcome(webapp2.RequestHandler):
+    def get(self):
+        user_name = self.request.get()
+        self.response.write("Welcome, ")
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
