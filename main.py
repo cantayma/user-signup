@@ -54,17 +54,39 @@ class MainHandler(webapp2.RequestHandler):
         verified_password = self.request.get("verify")
         email = self.request.get("email")
 
+        user_error = """
+        Sorry, that's not a valid username.
+        Please try again.
+        Username must be 3-20 characters long and not include any puctuation
+        other than "_" or "-".
+        """
+
+        password_error = """
+        Oops! Your passwords don't match. Please try again.
+        """
+
+        email_error = """
+        That's doesn't look like a valid email.
+        Please make sure it has an "@" and a "."
+        """
+
         USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-        if USER_RE.match(username):
-            return "username_valid"
+        def valid_username(username):
+            if username and USER_RE.match(username):
+                return True
+            return user_error
 
         PASS_RE = re.compile(r"^.{3,20}$")
-        if PASS_RE.match(password) and verified_password(password):
-            return "password_valid"
+        def valid_password(password):
+            if PASS_RE.match(password) and verified_password(password):
+                return True
+            return password_error
 
         EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
-        if EMAIL_RE.match(email):
-            return "email_valid"
+        def valid_email(email):
+            if EMAIL_RE.match(email):
+                return True
+            return email_error
 
         #if all is good, redirect to /welcome
         #if bad then
