@@ -1,4 +1,5 @@
 import webapp2
+import re
 
 header = """
 <DOCTYPE! html>
@@ -11,7 +12,7 @@ header = """
         <h3>Please fill out the form below to create an account.</h3>
 """
 form = """
-        <form>
+        <form action="/welcome" method="post">
             <label>
                 Username:
                 <input type="text" name="username">
@@ -24,7 +25,7 @@ form = """
             <br>
             <label>
                 Verify Password:
-                <input type="password">
+                <input type="verify">
             </label>
             <br>
             <label>
@@ -47,9 +48,30 @@ class MainHandler(webapp2.RequestHandler):
         self.response.write(content)
 
     def post(self):
-        #error checkig here
-        #if good then
+
+        username = self.request.get("username")
+        password = self.request.get("password")
+        verified_password = self.request.get("verify")
+        email = self.request.get("email")
+
+        USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+        def valid_username(username):
+            if USER_RE.match(username):
+                return True
+
+        PASS_RE = re.compile(r"^.{3,20}$")
+        def valid_password(password):
+            if PASS_RE.match(password) and verified_password(password):
+                return True
+
+        EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
+        def valid_email(email):
+            if EMAIL_RE.match(email):
+                return True
+
         #redirect to /welcome
+        #if bad then
+        #redirect to /
 
 class Welcome(webapp2.RequestHandler):
     def get(self):
@@ -57,5 +79,6 @@ class Welcome(webapp2.RequestHandler):
         self.response.write("Welcome, ")
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/welcome', Welcome)
 ], debug=True)
