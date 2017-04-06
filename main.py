@@ -55,21 +55,18 @@ class MainHandler(webapp2.RequestHandler):
         email = self.request.get("email")
 
         USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-        def valid_username(username):
-            if USER_RE.match(username):
-                return True
+        if USER_RE.match(username):
+            return "username_valid"
 
         PASS_RE = re.compile(r"^.{3,20}$")
-        def valid_password(password):
-            if PASS_RE.match(password) and verified_password(password):
-                return True
+        if PASS_RE.match(password) and verified_password(password):
+            return "password_valid"
 
         EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
-        def valid_email(email):
-            if EMAIL_RE.match(email):
-                return True
+        if EMAIL_RE.match(email):
+            return "email_valid"
 
-        #redirect to /welcome
+        #if all is good, redirect to /welcome
         #if bad then
         #redirect to /
 
