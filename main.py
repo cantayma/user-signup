@@ -17,7 +17,7 @@ form = """
         <form method="post">
             <label>
                 Username:
-                <input type="text" name="username">
+                <input type="text" name="username" value=%(username)s>
                 <span style="color:purple">%(username_error)s</span>
             </label>
             <br>
@@ -35,7 +35,7 @@ form = """
             <br>
             <label>
                 Email (optional):
-                <input type="email" name="email">
+                <input type="email" name="email" value=%(email)s>
                 <span style="color:purple">%(email_error)s</span>
             </label>
             <br>
@@ -53,14 +53,24 @@ footer = """
 
 class MainHandler(webapp2.RequestHandler):
 
-    def write_form(self, username_error_msg="", valid_password_error_msg="", password_match_error_msg="", email_error_msg=""):
+    def write_form(
+            self,
+            username_error_msg="",
+            valid_password_error_msg="",
+            password_match_error_msg="",
+            email_error_msg="",
+            username="",
+            email=""):
+
         self.response.write(
             header
             + form % {
             "username_error":username_error_msg,
             "valid_password_error":valid_password_error_msg,
             "password_match_error":password_match_error_msg,
-            "email_error":email_error_msg
+            "email_error":email_error_msg,
+            "username":username,
+            "email":email
             } + footer)
 
     def get(self):
@@ -150,7 +160,9 @@ class MainHandler(webapp2.RequestHandler):
             username_error_msg,
             valid_password_error_msg,
             password_match_error_msg,
-            email_error_msg)
+            email_error_msg,
+            username,
+            email)
 
 
 
