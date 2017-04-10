@@ -114,6 +114,8 @@ class MainHandler(webapp2.RequestHandler):
         That's doesn't look like a valid email.
         Please make sure it has an "@" and a "."
         """
+        if valid_username and valid_password and valid_verify and valid_email:
+            self.redirect("/welcome?username=" + username)
 
         if not valid_username:
             username_error_msg = username_error_msg
@@ -150,8 +152,7 @@ class MainHandler(webapp2.RequestHandler):
             password_match_error_msg,
             email_error_msg)
 
-        if valid_username and valid_password and valid_verify and valid_email:
-            self.redirect("/welcome")
+
 
 class Welcome(webapp2.RequestHandler):
     def get(self):
