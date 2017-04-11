@@ -110,51 +110,36 @@ class MainHandler(webapp2.RequestHandler):
         valid_verify = match_password(password, verify)
         valid_email = validate_email(email)
 
-        username_error_msg = """
-        Sorry, that's not a valid username. Please make sure it's 3-20 characters
-        and has at least one "_" or "-" and a number.
-        """
-        valid_password_error_msg = """
-        Your password must be between 3-20 characters and may have a "."
-        """
-        password_match_error_msg = """
-        Oops! Your passwords don't match. Please try again.
-        """
-        email_error_msg = """
-        That's doesn't look like a valid email.
-        Please make sure it has an "@" and a "."
-        """
+
+        username_error_msg =""
+        valid_password_error_msg = ""
+        password_match_error_msg = ""
+        email_error_msg = ""
+
         if valid_username and valid_password and valid_verify and valid_email:
             self.redirect("/welcome?username=" + username)
 
         if not valid_username:
-            username_error_msg = username_error_msg
-        elif not valid_password or valid_verify:
-            username_error_msg = ""
-            valid_password_error_msg = valid_password_error_msg
-            password_match_error_msg = password_match_error_msg
+            username_error_msg = """
+        Sorry, that's not a valid username. Please make sure it's 3-20 characters
+        and has at least one "_" or "-" and a number.
+        """
 
         if not valid_password:
-            valid_password_error_msg = valid_password_error_msg
-        elif not valid_username or valid_verify:
-            username_error_msg = username_error_msg
-            valid_password_error_msg = ""
-            password_match_error_msg = password_match_error_msg
+            valid_password_error_msg = """
+        Your password must be between 3-20 characters and may have a "."
+        """
 
         if not valid_verify:
-            password_match_error_msg = password_match_error_msg
-        elif not valid_username or valid_password:
-            username_error_msg = username_error_msg
-            valid_password_error_msg = valid_password_error_msg
-            password_match_error_msg = ""
+            password_match_error_msg = """
+        Oops! Your passwords don't match. Please try again.
+        """
 
         if not valid_email:
-            email_error_msg = email_error_msg
-        elif not valid_username or valid_password or valid_verify:
-            username_error_msg = username_error_msg
-            valid_password_error_msg = valid_password_error_msg
-            password_match_error_msg = password_match_error_msg
-            email_error_msg = ""
+            email_error_msg = """
+        That's doesn't look like a valid email.
+        Please make sure it has an "@" and a "."
+        """
 
         self.write_form(
             username_error_msg,
